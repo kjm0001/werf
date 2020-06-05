@@ -60,6 +60,8 @@ $(document).ready(function () {
   // releasesInfo variable generates by generate_artifacts script and loads in head on the build stage as channels.js;
   var releasesInfo = window.releasesInfo;
 
+  if (releasesInfo === undefined || releasesInfo.menuChannels === undefined) return;
+
   var menu = $('#doc-versions-menu');
   var toggler;
   var currentRelease = $('#werfVersion').text();
@@ -255,4 +257,90 @@ $(document).ready(function(){
     $btn3.remove();
     $title.after(new_btns);
   });
+});
+
+// Presentation
+
+$(document).ready(function() {
+
+  var magic = new ScrollMagic.Controller();
+  var magic_width = window.innerHeight > 700 ? 800 : 650;
+  var magic_height = parseInt(magic_width/1.4);
+
+  // Pin scheme
+  new ScrollMagic.Scene({duration: 5000, offset: -1})
+  .setPin('#presentation')
+  .addTo(magic);
+
+  // Move away title & move in scheme
+  new ScrollMagic.Scene({duration: 500, offset: 10}).setTween(
+    new TimelineMax()
+    .to('#presentation-title', {x: '-2000px', opacity: 0}, 0)
+    .to('#presentation-bg', {x: '-1500px'}, 0)
+    .to('#presentation-scheme', {
+      width: magic_width, 
+      x: '-' + (1160 - magic_width)/2 + 'px',  
+      y: + (45 + ((window.innerHeight - magic_height)/2) - (window.innerHeight > 700 ? ((window.innerHeight - 480)/2) : 130)) + 'px'
+    }, 0))
+  .addTo(magic);
+
+  // Hide arrows & smart
+  new ScrollMagic.Scene({duration: 100, offset: 550}).setTween(
+    new TimelineMax()
+    .to('#scheme_arrows_gw', {opacity: '0'}, 0)
+    .to('#scheme_arrows_wd', {opacity: '0'}, 0)
+    .to('#scheme_arrows_wk', {opacity: '0'}, 0)
+    .to('#scheme_smart_2', {opacity: '0'}, 0)
+    .to('#scheme_smart', {opacity: '0'}, 0)
+  ).addTo(magic);
+
+  // Git -> Werf, show
+  new ScrollMagic.Scene({duration: 300, offset: 950}).setTween(
+    new TimelineMax()
+    .to('#scheme_arrows_gw', {opacity: '1'}, 0)
+  ).addTo(magic);
+
+  // Werf -> Docker Registry, show
+  new ScrollMagic.Scene({duration: 300, offset: 1550}).setTween(
+    new TimelineMax()
+    .to('#scheme_arrows_wd', {opacity: '1'}, 0)
+    .to('#scheme_smart_2', {opacity: '1'}, 0)
+  ).addTo(magic);
+  
+  // Werf -> Docker Registry, sync
+  new ScrollMagic.Scene({duration: 1000, offset: 2150}).setTween(
+    new TimelineMax()
+    .to('#scheme_smart_icon_update_arrows_2', {rotation: '-720', transformOrigin: '50% 50%'}, 0)
+  ).addTo(magic);
+
+  // Werf -> Docker Registry, show info
+  new ScrollMagic.Scene({duration: 300, offset: 2750}).setTween(
+    new TimelineMax()
+    .to('#scheme_smart_icon_update_2', {opacity: '0'})
+    .to('#scheme_smart_icon_check_2', {opacity: '1'})
+    .to('#scheme_step', {opacity: '1'}, 0)
+    .to('#scheme_step_connector', {opacity: '1'}, 0)
+  ).addTo(magic);
+
+  // Werf -> Kubernetes, show
+  new ScrollMagic.Scene({duration: 300, offset: 3350}).setTween(
+    new TimelineMax()
+    .to('#scheme_arrows_wk', {opacity: '1'}, 0)
+    .to('#scheme_smart', {opacity: '1'}, 0)
+  ).addTo(magic);
+
+  // Werf -> Kubernetes, sync
+  new ScrollMagic.Scene({duration: 1000, offset: 3950}).setTween(
+    new TimelineMax()
+    .to('#scheme_smart_icon_update_arrows', {rotation: '-720', transformOrigin: '50% 50%'}, 0)
+  ).addTo(magic);
+
+  // Werf -> Docker Registry, show info  
+  new ScrollMagic.Scene({duration: 300, offset: 4550}).setTween(
+    new TimelineMax()
+    .to('#scheme_smart_icon_update', {opacity: '0'})
+    .to('#scheme_smart_icon_check', {opacity: '1'})
+    .to('#scheme_step_2', {opacity: '1'}, 0)
+    .to('#scheme_step_connector_2', {opacity: '1'}, 0)
+  ).addTo(magic);
 });
